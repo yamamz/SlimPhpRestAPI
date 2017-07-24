@@ -82,6 +82,33 @@ oci_close($conn);
 });
 
 
+$app->post('/api/logs/add', function (Request $request, Response $response) {
+$smsText_log = $request->getParam('SMS_TEXT');
+$reciepient_no_log=$request->getParam('RECIEPIENT_NO');
+$status_log=$request->getParam('STATUS');
+
+
+    //for db connection
+require $_SERVER['DOCUMENT_ROOT'].'/SlimWebApi/src/config.php';
+    //for my sqlfunction
+require $_SERVER['DOCUMENT_ROOT'].'/SlimWebApi/src/SqlHeper.php';
+
+$helper=new SqlHelper;
+$db=new db;
+ //connect oracle db
+$conn=$db->connect();
+
+ $responseLogCreated=$helper->createLogs($conn,$smsText_log,$reciepient_no_log,$status_log);
+
+$response->getBody()->write(json_encode($responseLogCreated));
+return $response;
+
+oci_free_statement($stid);
+oci_close($conn);
+
+});
+
+
 $app->delete('/api/department/delete/{id}', function (Request $request, Response $response) {
     $id=$request->getAttribute('id');
 

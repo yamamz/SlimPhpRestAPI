@@ -178,10 +178,32 @@ if($r){
         array_push($responseDeparmentUpdated,$department);
 }
 
-
-
    return $responseDeparmentUpdated;
 
     }
+
+
+function createLogs($conn,$smsText,$reciepient_no,$status){
+
+$response = array();
+$stid = oci_parse($conn, 'INSERT INTO sms_logs (sms_text,reciepient_no,status) VALUES(:SMS_TEXT,:RECIEPIENT_NO,:STATUS)');
+
+//sql injection protection
+oci_bind_by_name($stid,':SMS_TEXT',$smsText);
+oci_bind_by_name($stid,':RECIEPIENT_NO',$reciepient_no);
+oci_bind_by_name($stid,':STATUS',$status);
+$r = oci_execute($stid);  //executes and commits
+if ($r) {
+$response["sms_text"]=$smsText;
+$response["reciepient_no"]=$reciepient_no;
+$response["status"]=$status;
+
+}
+else{
+  echo json_encode("Failed");
+}
+
+return $response;
+}
 
 }
