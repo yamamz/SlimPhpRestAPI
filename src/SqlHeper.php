@@ -120,7 +120,6 @@ if ($r) {
 $responseDeparmentAdd["department_name"]=$deptName;
 $responseDeparmentAdd["manager_id"]=$managerId;
 $responseDeparmentAdd["location_id"]=$locationId;
-
 }
 else{
   echo json_encode("Failed");
@@ -130,7 +129,7 @@ return $responseDeparmentAdd;
 
     }
 
-
+//delete department
 function deleteDepartment($conn,$deptId){
 $response = array();
 $stid = oci_parse($conn, "DELETE FROM departments WHERE department_id =:department_id");
@@ -146,5 +145,43 @@ else{
 }
  return $response;
 }
+
+
+function updateDepartment($conn,$dept_Id,$deptNameUpdate,$managerIdUpdate,$locationIdUpdate){
+
+$stid = oci_parse($conn, 'UPDATE departments
+SET department_name =:department_name , manager_id=:manager_id, location_id=:location_id
+WHERE department_id = :department_id');
+//sql injection protection
+oci_bind_by_name($stid, ':department_id', $dept_Id);
+oci_bind_by_name($stid, ':department_name', $deptNameUpdate);
+oci_bind_by_name($stid,':manager_id',$managerIdUpdate);
+oci_bind_by_name($stid,':location_id',$locationIdUpdate);
+if (!$stid) {
+    $e = oci_error($conn);
+    trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
+}
+// Perform the logic of the query
+$r = oci_execute($stid);
+if (!$r) {
+    $e = oci_error($stid);
+    trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
+}
+// Fetch the results of the query
+$responseDeparmentUpdated= array();
+if($r){
+        $department = array();
+        $department["department_id"] =$dept_Id;
+        $department["department_name"] = $deptNameUpdate;
+        $department["manager_id"] = $managerIdUpdate;
+        $department["location_id"] = $locationIdUpdate;
+        array_push($responseDeparmentUpdated,$department);
+}
+
+
+
+   return $responseDeparmentUpdated;
+
+    }
 
 }

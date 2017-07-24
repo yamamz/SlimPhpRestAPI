@@ -105,3 +105,31 @@ oci_close($conn);
 
 });
 
+$app->put('/api/department/update/{id}', function (Request $request, Response $response) {
+$dept_Id=$request->getAttribute('id');
+$deptNameUpdate = $request->getParam('DEPARTMENT_NAME');
+$managerIdUpdate=$request->getParam('MANAGER_ID');
+$locationIdUpdate=$request->getParam('LOCATION_ID');
+
+    //for db connection
+require $_SERVER['DOCUMENT_ROOT'].'/SlimWebApi/src/config.php';
+    //for my sqlfunction
+require $_SERVER['DOCUMENT_ROOT'].'/SlimWebApi/src/SqlHeper.php';
+
+$helper=new SqlHelper;
+$db=new db;
+ //connect oracle db
+$conn=$db->connect();
+
+$responseDeparmentUpdated=$helper->updateDepartment($conn,$dept_Id,$deptNameUpdate,$managerIdUpdate,$locationIdUpdate);
+
+    $response->getBody()->write(json_encode($responseDeparmentUpdated));
+
+return $response;
+
+oci_free_statement($stid);
+oci_close($conn);
+
+});
+
+
