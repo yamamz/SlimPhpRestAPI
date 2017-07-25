@@ -3,8 +3,6 @@
 
 class db{
 
-
-
     function connect(){
     $user='hr';
     $password='hr';
