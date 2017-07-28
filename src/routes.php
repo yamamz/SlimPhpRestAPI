@@ -3,9 +3,9 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 //for db connection
-require $_SERVER['DOCUMENT_ROOT'].'/SlimWebApi/src/config.php';
+require $_SERVER['DOCUMENT_ROOT'].'/OracleAPI/src/config.php';
 //for my sqlfunction
-require $_SERVER['DOCUMENT_ROOT'].'/SlimWebApi/src/SqlHeper.php';
+require $_SERVER['DOCUMENT_ROOT'].'/OracleAPI/src/SqlHeper.php';
 
 
 //search all department route
@@ -149,6 +149,25 @@ return $response;
 //close db connection
 oci_free_statement($stid);
 oci_close($conn);
+});
+
+
+$app->get('/api/employees',function(Request $request, Response $response){
+$helper=new SqlHelper;
+//instantiate db from config.php
+$db=new db;
+ //connect oracle db
+$conn=$db->connect();
+
+$responseEmployee=$helper->getEmployees($conn);
+
+$response->getBody()->write(json_encode($responseEmployee));
+
+return $response;
+
+oci_free_statement($stid);
+oci_close($conn);
+
 });
 
 

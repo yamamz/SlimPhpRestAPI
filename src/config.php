@@ -6,7 +6,7 @@ class db{
     function connect(){
     $user='hr';
     $password='hr';
-    $db='192.168.81.233/XE';
+    $db='localhost/XE';
 
        $conn = oci_connect($user, $password, $db);
         if (!$conn) {
