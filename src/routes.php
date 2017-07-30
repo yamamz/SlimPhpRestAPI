@@ -18,9 +18,7 @@ $responseDeparments=$helper->SearchDepartments($conn);
 // Fetch the results of the query
 $response->getBody()->write(json_encode($responseDeparments));
 return $response;
-//close db connection
-oci_free_statement($stid);
-oci_close($conn);
+
 });
 
 
@@ -38,9 +36,7 @@ $responseDeparment=$helper->SearchDepartment($conn,$id);
 //response into body in JSON
 $response->getBody()->write(json_encode($responseDeparment));
 return $response;
-//close db connection
-oci_free_statement($stid);
-oci_close($conn);
+
 });
 
 
@@ -60,9 +56,7 @@ $responseDeparmentCreated=$helper->createDepartment($conn,$deptName,$managerId,$
 //response into body in JSON
 $response->getBody()->write(json_encode($responseDeparmentCreated));
 return $response;
-//close db connection
-oci_free_statement($stid);
-oci_close($conn);
+
 });
 
 
@@ -83,9 +77,7 @@ $responseLogCreated=$helper->createLogs($conn,$smsText_log,$reciepient_no_log,$s
 //response into body in JSON
 $response->getBody()->write(json_encode($responseLogCreated));
 return $response;
-//close db connection
-oci_free_statement($stid);
-oci_close($conn);
+
 });
 
 
@@ -103,9 +95,7 @@ $responseDeparment=$helper->deleteDepartment($conn,$id);
 //response the result in Json
 $response->getBody()->write(json_encode($responseDeparment));
 return $response;
-//close db connection
-oci_free_statement($stid);
-oci_close($conn);
+
 });
 
 
@@ -126,9 +116,7 @@ $responseDeparmentUpdated=$helper->updateDepartment($conn,$dept_Id,$deptNameUpda
 //response the result in Json
 $response->getBody()->write(json_encode($responseDeparmentUpdated));
 return $response;
-//close db connection
-oci_free_statement($stid);
-oci_close($conn);
+
 });
 
 
@@ -146,28 +134,51 @@ $responseContacts=$helper->getContacts($conn);
 //response the result in Json
 $response->getBody()->write(json_encode($responseContacts));
 return $response;
-//close db connection
-oci_free_statement($stid);
-oci_close($conn);
+
 });
 
-
+//get employees route
 $app->get('/api/employees',function(Request $request, Response $response){
 $helper=new SqlHelper;
 //instantiate db from config.php
 $db=new db;
  //connect oracle db
 $conn=$db->connect();
-
 $responseEmployee=$helper->getEmployees($conn);
-
 $response->getBody()->write(json_encode($responseEmployee));
-
 return $response;
+});
 
-oci_free_statement($stid);
-oci_close($conn);
 
+//add employee route
+$app->post('/api/employee/add',function(Request $request, Response $response){
+//initial to null for fields that can be null in database
+$phone=null;
+$comm=null;
+$manager_id=null;
+$department_id=null;
+//get the param for POST value in Body
+$first_name=$request->getParam('FIRST_NAME');
+$last_name=$request->getParam('LAST_NAME');
+$phone=$request->getParam('PHONE_NUMBER');
+$email=$request->getParam('EMAIL');
+$hire_date=$request->getParam('HIRE_DATE');
+$job_id=$request->getParam('JOB_ID');
+$salary=$request->getParam('SALARY');
+$comm=$request->getParam('COMMISSION_PCT');
+$manager_id=$request->getParam('MANAGER_ID');
+$department_id=$request->getParam('DEPARTMENT_ID');
+
+$helper=new SqlHelper;
+//instantiate db from config.php
+$db=new db;
+//connect oracle db
+$conn=$db->connect();
+
+$responseAppEmployee=$helper->createEmployee($conn,$first_name,$last_name,$email,$phone,$hire_date,$job_id,$salary,$comm,$manager_id,$department_id);
+
+$response->getBody()->write(json_encode($responseAppEmployee));
+return $response;
 });
 
 

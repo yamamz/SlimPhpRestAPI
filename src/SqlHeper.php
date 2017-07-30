@@ -19,7 +19,7 @@ if (!$r) {
     trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
 }
 // Fetch the results of the query
-$response["departments"]= array();
+$response["department"]= array();
 while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
         $department = array();
         $department["department_id"] = $row["DEPARTMENT_ID"];
@@ -29,9 +29,12 @@ while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
         $department["location_id"] = $row["LOCATION_ID"];
         $department["location_city"] = $row["CITY"];
 
-    array_push($response["departments"],$department);
+    array_push($response["department"],$department);
 
 }
+    //close db connection
+oci_free_statement($stid);
+oci_close($conn);
     // echoing JSON response
     return $response;
   }
@@ -81,7 +84,11 @@ while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
         $department["location"] = $loc;
         array_push($responseDeparment["department"],$department);
 }
+    //close db connection
+oci_free_statement($stid);
+oci_close($conn);
 return  $responseDeparment;
+
 }
 
 //add deparment
@@ -100,7 +107,11 @@ $response="Success: Ok";
 else{
 $response="Success: failed";
 }
+    //close db connection
+oci_free_statement($stid);
+oci_close($conn);
 return $response;
+
 }
 
 //delete department
@@ -116,7 +127,11 @@ $response="Success: Ok";
 else{
  $response="Success: failed";
 }
+    //close db connection
+oci_free_statement($stid);
+oci_close($conn);
 return $response;
+
 }
 
 //update department
@@ -146,8 +161,11 @@ $response="Success: ok";
     else{
     $response="Success: failed";
     }
-
+//close db connection
+oci_free_statement($stid);
+oci_close($conn);
 return $response;
+
 }
 
 //create logs
@@ -166,7 +184,11 @@ $response="Success: Ok";
 else{
 $response="Success: failed";
 }
+//close db connection
+oci_free_statement($stid);
+oci_close($conn);
 return $response;
+
 }
 
 //get contacts
@@ -184,13 +206,13 @@ $e = oci_error($stid);
 trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
 }
 // Fetch the results of the query
-$response["contacts"]= array();
+$response["contact"]= array();
 while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
     $contact = array();
     $contact["contact_id"] = $row["CONTACT_ID"];
     $contact["full_name"] = $row["FULL_NAME"];
     $contact["mobile_no"] = $row["MOBILE_NO"];
-    array_push($response["contacts"],$contact);
+    array_push($response["contact"],$contact);
 }
  return $response;
 }
@@ -211,7 +233,7 @@ if (!$stid){
     trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
     }
 
-    $response["employees"]=array();
+    $response["Employee"]=array();
 
    while ($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) {
 
@@ -227,8 +249,42 @@ if (!$stid){
         $employee["commission_point"]=$row["COMMISSION_PCT"];
         $employee["manager_id"]=$row["MANAGER_ID"];
         $employee["department_id"]=$row["DEPARTMENT_ID"];
-     array_push($response["employees"],$employee);
+     array_push($response["Employee"],$employee);
     }
+    //close db connection
+oci_free_statement($stid);
+oci_close($conn);
     return $response;
+}
+
+
+function createEmployee($conn,$f_name,$l_name,$email,$phone,$h_date,$job_id,$salary,$com_pct,$manager_id,$department_id){
+
+    $stid=oci_parse($conn,'INSERT INTO employees(first_name,last_name,email,phone_number,hire_date,job_id,salary,commission_pct,manager_id,department_id) VALUES(:first_name,:last_name,:email,:phone_number,:hire_date,:job_id,:salary,:commission_pct,:manager_id,:department_id)');
+
+    oci_bind_by_name($stid,':first_name',$f_name);
+    oci_bind_by_name($stid,':last_name',$l_name);
+    oci_bind_by_name($stid,':email',$email);
+    oci_bind_by_name($stid,':phone_number',$phone);
+    oci_bind_by_name($stid,':job_id',$job_id);
+    oci_bind_by_name($stid,':salary',$salary);
+    oci_bind_by_name($stid,':commission_pct',$com_pct);
+    oci_bind_by_name($stid,':hire_date',$h_date);
+    oci_bind_by_name($stid,':manager_id',$manager_id);
+    oci_bind_by_name($stid,':department_id',$department_id);
+
+    $r=oci_execute($stid);
+
+    if($r){
+        $response="success: ok";
+    }
+    else{
+        $response="success: failed";
+    }
+//close db connection
+oci_free_statement($stid);
+oci_close($conn);
+
+return $response;
 }
 }
