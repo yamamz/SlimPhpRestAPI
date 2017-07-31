@@ -148,7 +148,7 @@ if (!$stid) {
     $e = oci_error($conn);
     trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
 }
-//Perform the logic of the query
+// Perform the logic of the query
 $r = oci_execute($stid);
 if (!$r) {
     $e = oci_error($stid);
@@ -177,12 +177,12 @@ oci_bind_by_name($stid,':SMS_TEXT',$smsText);
 oci_bind_by_name($stid,':RECIEPIENT_NO',$reciepient_no);
 oci_bind_by_name($stid,':STATUS',$status);
 $r = oci_execute($stid);  //executes and commits
-
+$response=array();
 if ($r) {
-$response="{success: Ok}";
+$response["success"]="ok";
 }
 else{
-$response="{success: failed}";
+$response["success"]="failed";
 }
 //close db connection
 oci_free_statement($stid);
