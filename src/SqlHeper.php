@@ -107,7 +107,7 @@ $response="{success: Ok}";
 else{
 $response="{success: failed}";
 }
-    //close db connection
+//close db connection
 oci_free_statement($stid);
 oci_close($conn);
 return $response;
@@ -148,7 +148,7 @@ if (!$stid) {
     $e = oci_error($conn);
     trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
 }
-// Perform the logic of the query
+//Perform the logic of the query
 $r = oci_execute($stid);
 if (!$r) {
     $e = oci_error($stid);
