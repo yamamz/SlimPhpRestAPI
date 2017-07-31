@@ -98,7 +98,6 @@ return $response;
 
 });
 
-
 //update department route
 $app->put('/api/department/update/{id}', function (Request $request, Response $response) {
 $dept_Id=$request->getAttribute('id');
@@ -118,8 +117,6 @@ $response->getBody()->write(json_encode($responseDeparmentUpdated));
 return $response;
 
 });
-
-
 
 //get contacts from oracle db route
 $app->get('/api/contacts', function (Request $request, Response $response) {
@@ -148,8 +145,6 @@ $responseEmployee=$helper->getEmployees($conn);
 $response->getBody()->write(json_encode($responseEmployee));
 return $response;
 });
-
-
 //add employee route
 $app->post('/api/employee/add',function(Request $request, Response $response){
 //initial to null for fields that can be null in database

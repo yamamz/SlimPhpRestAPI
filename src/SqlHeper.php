@@ -102,10 +102,10 @@ oci_bind_by_name($stid,':location_id',$locationId);
 $r = oci_execute($stid);  //executes and commits
 if ($r) {
 
-$response="Success: Ok";
+$response="{success: Ok}";
 }
 else{
-$response="Success: failed";
+$response="{success: failed}";
 }
     //close db connection
 oci_free_statement($stid);
@@ -122,10 +122,10 @@ $stid = oci_parse($conn, "DELETE FROM departments WHERE department_id =:departme
 oci_bind_by_name($stid, ':department_id', $deptId);
 $r = oci_execute($stid);  //executes and commits
 if ($r) {
-$response="Success: Ok";
+$response="{success: Ok}";
 }
 else{
- $response="Success: failed";
+ $response="{success: failed}";
 }
     //close db connection
 oci_free_statement($stid);
@@ -156,10 +156,10 @@ if (!$r) {
 }
 
 if($r){
-$response="Success: ok";
+$response="{success: ok}";
 }
     else{
-    $response="Success: failed";
+    $response="{success: failed}";
     }
 //close db connection
 oci_free_statement($stid);
@@ -179,10 +179,10 @@ oci_bind_by_name($stid,':STATUS',$status);
 $r = oci_execute($stid);  //executes and commits
 
 if ($r) {
-$response="Success: Ok";
+$response="{success: Ok}";
 }
 else{
-$response="Success: failed";
+$response="{success: failed}";
 }
 //close db connection
 oci_free_statement($stid);
@@ -249,6 +249,7 @@ if (!$stid){
         $employee["commission_point"]=$row["COMMISSION_PCT"];
         $employee["manager_id"]=$row["MANAGER_ID"];
         $employee["department_id"]=$row["DEPARTMENT_ID"];
+
      array_push($response["Employee"],$employee);
     }
     //close db connection
@@ -276,10 +277,10 @@ function createEmployee($conn,$f_name,$l_name,$email,$phone,$h_date,$job_id,$sal
     $r=oci_execute($stid);
 
     if($r){
-        $response="success: ok";
+        $response="{success: ok}";
     }
     else{
-        $response="success: failed";
+        $response="{success: failed}";
     }
 //close db connection
 oci_free_statement($stid);
